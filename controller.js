@@ -14,23 +14,36 @@ angular.module("myapp",[]).controller("mycontroller",function($scope){
     $scope.clear=function(){
         $scope.res="";
     }
+    
     $scope.caluclate=function(){
-        let i,j,indexarray=[],symarray=[],oparray=[],newop="",totalarray=[];
+        console.log("res=",$scope.res);
+        let i,j,newop="",totalarray=[];
         for(i=0;i<$scope.res.length;i++){
             
            
-            if($scope.res[i]=='x'|$scope.res[i]=='-'|$scope.res[i]=='÷'|$scope.res[i]=='+'){
+            if($scope.res[i]=='x'|$scope.res[i]=='÷'){
+
                 
-                
-                totalarray.push(newop)
+                totalarray.push(newop);
                 newop='';
-                totalarray.push($scope.res[i]);
-                console.log(totalarray);
+                totalarray.push(
+                    {symbol:$scope.res[i],id:2});
+                
                 
                 
             }
-            
-            else if (i<$scope.res.length){
+            else if($scope.res[i]=='+'|$scope.res[i]=='-'){
+                
+                totalarray.push(newop);
+                newop='';
+                totalarray.push(
+                    {symbol:$scope.res[i],id:1});
+                
+                
+                
+                
+            }
+            else  if(i<$scope.res.length){
                 newop+=$scope.res[i]
                 if($scope.res.length == i+1){
                     totalarray.push($scope.res[i]);
@@ -40,6 +53,152 @@ angular.module("myapp",[]).controller("mycontroller",function($scope){
             
             
         }
-    }
+        console.log(totalarray);
+        let symarray=[parseFloat(totalarray[1])],oparray=[parseFloat(totalarray[0]),parseFloat(totalarray[2])];
+        if(totalarray.length<4){
+            if(totalarray[1].symbol=='+'){
+                totalarray[0]=parseFloat(totalarray[0])+parseFloat(totalarray[2]);
+
+            }
+            else if(totalarray[1].symbol=='-'){
+                totalarray[0]=parseFloat(totalarray[0])-parseFloat(totalarray[2]);
+
+            }
+            else if(totalarray[1].symbol=='x'){
+                totalarray[0]=parseFloat(totalarray[0])*parseFloat(totalarray[2]);
+
+            }
+            else if(totalarray[1].symbol=='÷'){
+                totalarray[0]=parseFloat(totalarray[0])/parseFloat(totalarray[2]);
+
+            }
+            console.log("result=",totalarray[0])
+        }
+        else{
+
+        
+        for(i=3;i<totalarray.length;i++){
+            if(i%2!==0){
+                if(totalarray[i].id>=totalarray[i-2].id){
+                    symarray.push(totalarray[i]);
+                    
+                }
+                else{
+                    if(totalarray[i-2].symbol=='+'){
+                        oparray.pop();
+                        oparray.pop();
+                        oparray.push(parseFloat(totalarray[i-1])+parseFloat(totalarray[i-3]));
+                        symarray.pop();
+                        symarray.push(totalarray[i]);
+                        
+                        
+                        
+                        
+                    }
+                    else if(totalarray[i-2].symbol=='-'){
+                        oparray.pop();
+                        oparray.pop();
+                        oparray.push(parseFloat(totalarray[i-1])-parseFloat(totalarray[i-3]));
+                        symarray.pop();
+                        symarray.push(totalarray[i]);
+                        
+                        
+                    }
+                    else if(totalarray[i-2].symbol=='x'){
+                        oparray.pop();
+                        oparray.pop();
+                        oparray.push(parseFloat(totalarray[i-1])*parseFloat(totalarray[i-3]));
+                        symarray.pop();
+                        symarray.push(totalarray[i]);
+                        
+                        
+                    }
+                    else if(totalarray[i-2].symbol=='÷'){
+                        oparray.pop();
+                        oparray.pop();
+                        oparray.push(parseFloat(totalarray[i-1])/parseFloat(totalarray[i-3]));
+                        symarray.pop();
+                        symarray.push(totalarray[i]);
+                        
+                        
+                    }
+                }
+            }
+            else{
+                oparray.push(parseFloat(totalarray[i]));
+            }
+
+
+        }
+        console.log(oparray);
+        console.log(symarray);
+        result();
+
+        function mulerror(){
+            if(symarray[symarray.length-1].id==2){
+                if(symarray[symarray.length-1].symbol=='x'){
+                    oparray[oparray.length-2]=oparray[oparray.length-2]*oparray[oparray.length-1];
+                    oparray.pop();
+                    symarray.pop();
+                }
+                else if(symarray[symarray.length-1].symbol=='÷'){
+                    oparray[oparray.length-2]=oparray[oparray.length-2]/oparray[oparray.length-1];
+                    oparray.pop();
+                    symarray.pop();
+                }
+            result()
+
+        }
+        
+        
+
+        }
+        function result(){
+            
+            if(symarray[symarray.length-1].id==1){
+                symarray.forEach(function(i){
+                    console.log("sanju");
+                    if(i.symbol=='+'){
+                        oparray[0]=oparray[0]+oparray[1];
+                        oparray.splice(1,1);
+                    }
+                    else if(i.symbol=='-'){
+                        oparray[0]=oparray[0]-oparray[1];
+                        oparray.splice(1,1);
+                    }
+                    else if(i.symbol=='x'){
+                        oparray[0]=oparray[0]*oparray[1];
+                        oparray.splice(1,1);
+                    }
+                    else if(i.symbol=='÷'){
+                        oparray[0]=oparray[0]/oparray[1];
+                        oparray.splice(1,1);
+                    }
+                })
+                console.log("ans",oparray);
+                if(oparray.length!==1){
+                    result();
+                }
+    
+            }
+            else{
+                mulerror();
+    
+            }
+
+        }
+        
+        
+    
+            
+        
+        
+            
+
+        
+        
+        
+
+    }}
         
 })
