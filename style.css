@@ -1,0 +1,14 @@
+#result{
+    border-style: solid;
+    height: 1cm;
+    width: 6.3cm;
+    margin-bottom: 10px;
+}
+.button{
+    border-style: none;
+    height: 1.5cm;
+    width: 1.5cm;
+    background-color: black;
+    color: white;
+    margin-bottom: 10px;
+}

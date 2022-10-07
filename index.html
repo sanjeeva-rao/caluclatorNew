@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>caluclator</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="controller.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div ng-app="myapp" ng-controller="mycontroller">
+        <div id="result">
+           <p>{{res}}</p> 
+
+        </div>
+        <div ng-repeat="x in buttons">
+            <button class="button" ng-click="goto($index,0)">{{x[0].button}}</button>
+            <button class="button" ng-click="goto($index,1)">{{x[1].button}}</button>
+            <button class="button" ng-click="goto($index,2)">{{x[2].button}}</button>
+            <button class="button" ng-click="goto($index,3)">{{x[3].button}}</button>
+
+        </div>
+        <button ng-click="caluclate()">Caluclate</button>
+        <button ng-click="clear()">clear</button>
+
+    </div>
+</body>
+</html>
