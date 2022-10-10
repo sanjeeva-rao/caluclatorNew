@@ -3,7 +3,7 @@ angular.module("myapp",[]).controller("mycontroller",function($scope){
         [{button:7,value:7},{button:8,value:8},{button:9,value:9},{button:"÷",value:12}],
         [{button:4,value:4},{button:5,value:4},{button:6,value:6},{button:"x",value:11}],
         [{button:1,value:1},{button:2,value:2},{button:3,value:3},{button:"-",value:14}],
-        [{button:0,value:0},{button:".",value:"."},{button:"+",value:13},{button:"="}],
+        [{button:0,value:0},{button:".",value:"."},{button:"+",value:13},{button:"^"}],
         
     ]
     $scope.res=""
@@ -73,7 +73,8 @@ angular.module("myapp",[]).controller("mycontroller",function($scope){
                 totalarray[0]=parseFloat(totalarray[0])/parseFloat(totalarray[2]);
 
             }
-            console.log("result=",totalarray[0])
+            console.log("result=",totalarray[0]);
+            $scope.res=totalarray[0];
         }
         else{
             function finderror(){
@@ -210,6 +211,7 @@ angular.module("myapp",[]).controller("mycontroller",function($scope){
         function result(){
             if(symarray.length==0){
                 console.log("ans",oparray);
+                $scope.res=oparray[0];
                 console.log("success")
             }
             
@@ -239,6 +241,7 @@ angular.module("myapp",[]).controller("mycontroller",function($scope){
                 }
                 else{
                     console.log("ans",oparray);
+                    $scope.res=oparray[0];
 
                 }
     
