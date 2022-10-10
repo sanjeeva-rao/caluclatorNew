@@ -20,14 +20,31 @@ angular.module("myapp",[]).controller("mycontroller",function($scope){
         let i,j,newop="",totalarray=[];
         for(i=0;i<$scope.res.length;i++){
             
+            if($scope.res[i]=='^'){
+                totalarray.push(newop);
+                newop='';
+                totalarray.push(
+                    {symbol:$scope.res[i],id:4});
+            }
            
-            if($scope.res[i]=='x'|$scope.res[i]=='÷'){
+            else if($scope.res[i]=='x'){
 
                 
                 totalarray.push(newop);
                 newop='';
                 totalarray.push(
                     {symbol:$scope.res[i],id:2});
+                
+                
+                
+            }
+            else if($scope.res[i]=='÷'){
+
+                
+                totalarray.push(newop);
+                newop='';
+                totalarray.push(
+                    {symbol:$scope.res[i],id:3});
                 
                 
                 
@@ -73,6 +90,10 @@ angular.module("myapp",[]).controller("mycontroller",function($scope){
                 totalarray[0]=parseFloat(totalarray[0])/parseFloat(totalarray[2]);
 
             }
+            else{
+                totalarray[0]=parseFloat(totalarray[0])**parseFloat(totalarray[2]);
+
+            }
             console.log("result=",totalarray[0]);
             $scope.res=totalarray[0];
         }
@@ -86,18 +107,30 @@ angular.module("myapp",[]).controller("mycontroller",function($scope){
                     symarray.push(totalarray[i]);
                 }
                 else{
-                    if(symarray[symarray.length-1].symbol=='x'){
+                    if(symarray[symarray.length-1].symbol=='^'){
+                        oparray[oparray.length-2]=oparray[oparray.length-2]**oparray[oparray.length-1];
+                        oparray.pop();
+                        symarray.pop();
+                        //symarray.push(totalarray[i]);
+                        finderror();
+                    }
+
+                    
+                    else if(symarray[symarray.length-1].symbol=='x'){
                         oparray[oparray.length-2]=oparray[oparray.length-2]*oparray[oparray.length-1];
                         oparray.pop();
                         symarray.pop();
-                        symarray.push(totalarray[i]);
+
+                        //symarray.push(totalarray[i]);
+                        finderror();
 
                     }
                     else{
-                        oparray[oparray.length-2]=oparray[oparray.length-1]/oparray[oparray.length-2];
+                        oparray[oparray.length-2]=oparray[oparray.length-2]/oparray[oparray.length-1];
                         oparray.pop();
                         symarray.pop();
-                        symarray.push(totalarray[i]);
+                        //symarray.push(totalarray[i]);
+                        finderror();
                     }
                     
                 }
@@ -111,40 +144,12 @@ angular.module("myapp",[]).controller("mycontroller",function($scope){
                     
                 }
                 else{
-                    if(totalarray[i-2].symbol=='+'){
+                    
+                    if(totalarray[i-2].symbol=='x'){
+                        oparray[oparray.length-2]=parseFloat(oparray[oparray.length-2])*parseFloat(oparray[oparray.length-1]);
                         oparray.pop();
-                        oparray.pop();
-                        oparray.push(parseFloat(totalarray[i-1])+parseFloat(totalarray[i-3]));
-                        symarray.pop();
-                        finderror();
-                        
-                       
                         
                         
-                       
-                        
-                        
-                        
-                        
-                    }
-                    else if(totalarray[i-2].symbol=='-'){
-                        oparray.pop();
-                        oparray.pop();
-                        oparray.push(parseFloat(totalarray[i-1])-parseFloat(totalarray[i-3]));
-                        symarray.pop();
-                        finderror();
-    
-                        
-
-                       
-                        
-                        
-                        
-                    }
-                    else if(totalarray[i-2].symbol=='x'){
-                        oparray.pop();
-                        oparray.pop();
-                        oparray.push(parseFloat(totalarray[i-1])*parseFloat(totalarray[i-3]));
                         
                         symarray.pop();
                         finderror();
@@ -158,19 +163,26 @@ angular.module("myapp",[]).controller("mycontroller",function($scope){
                         
                     }
                     else if(totalarray[i-2].symbol=='÷'){
+                        oparray[oparray.length-2]=parseFloat(oparray[oparray.length-2])/parseFloat(oparray[oparray.length-1]);
                         oparray.pop();
+                        
+                        
+                        
+                        symarray.pop();
+                        finderror();
+                        
+                        //symarray.push(totalarray[i]);
+                    }
+                    else if(totalarray[i-2].symbol=='^'){
+                        oparray[oparray.length-2]=parseFloat(oparray[oparray.length-2])**parseFloat(oparray[oparray.length-1]);
                         oparray.pop();
-                        oparray.push(parseFloat(totalarray[i-3])/parseFloat(totalarray[i-1]));
+                        
+                        
+                        
                         symarray.pop();
                         finderror();
                         //symarray.push(totalarray[i]);
-
-                       
-
-
-                            
-                            
-                        }
+                    }
                         
                         
                     }
@@ -190,7 +202,7 @@ angular.module("myapp",[]).controller("mycontroller",function($scope){
         result();
 
         function mulerror(){
-            if(symarray[symarray.length-1].id==2){
+            if(symarray[symarray.length-1].id>=2){
                 if(symarray[symarray.length-1].symbol=='x'){
                     oparray[oparray.length-2]=oparray[oparray.length-1]*oparray[oparray.length-2];
                     oparray.pop();
@@ -198,6 +210,11 @@ angular.module("myapp",[]).controller("mycontroller",function($scope){
                 }
                 else if(symarray[symarray.length-1].symbol=='÷'){
                     oparray[oparray.length-2]=oparray[oparray.length-2]/oparray[oparray.length-1];
+                    oparray.pop();
+                    symarray.pop();
+                }
+                else if(symarray[symarray.length-1].symbol=='^'){
+                    oparray[oparray.length-2]=oparray[oparray.length-2]**oparray[oparray.length-1];
                     oparray.pop();
                     symarray.pop();
                 }
@@ -232,6 +249,10 @@ angular.module("myapp",[]).controller("mycontroller",function($scope){
                     }
                     else if(i.symbol=='÷'){
                         oparray[0]=oparray[0]/oparray[1];
+                        oparray.splice(1,1);
+                    }
+                    else if(i.symbol=='^'){
+                        oparray[0]=oparray[0]**oparray[1];
                         oparray.splice(1,1);
                     }
                 })

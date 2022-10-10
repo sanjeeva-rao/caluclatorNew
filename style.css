@@ -12,3 +12,12 @@
     color: white;
     margin-bottom: 10px;
 }
+.button-2{
+    border-style: none;
+    height: 1.5cm;
+    width: 3cm;
+    background-color:blue;
+    color: white;
+    margin-right: 10px;
+
+}
