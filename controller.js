@@ -46,7 +46,7 @@ angular.module("myapp",[]).controller("mycontroller",function($scope){
             else  if(i<$scope.res.length){
                 newop+=$scope.res[i]
                 if($scope.res.length == i+1){
-                    totalarray.push($scope.res[i]);
+                    totalarray.push(newop);
                 }
             }
             
@@ -54,7 +54,8 @@ angular.module("myapp",[]).controller("mycontroller",function($scope){
             
         }
         console.log(totalarray);
-        let symarray=[parseFloat(totalarray[1])],oparray=[parseFloat(totalarray[0]),parseFloat(totalarray[2])];
+        let symarray=[totalarray[1]],oparray=[parseFloat(totalarray[0]),parseFloat(totalarray[2])];
+        
         if(totalarray.length<4){
             if(totalarray[1].symbol=='+'){
                 totalarray[0]=parseFloat(totalarray[0])+parseFloat(totalarray[2]);
@@ -75,6 +76,31 @@ angular.module("myapp",[]).controller("mycontroller",function($scope){
             console.log("result=",totalarray[0])
         }
         else{
+            function finderror(){
+                
+                if(symarray.length==0){
+                    symarray.push(totalarray[i]);
+                }
+                else if(totalarray[i].id>=symarray[symarray.length-1].id){
+                    symarray.push(totalarray[i]);
+                }
+                else{
+                    if(symarray[symarray.length-1].symbol=='x'){
+                        oparray[oparray.length-2]=oparray[oparray.length-2]*oparray[oparray.length-1];
+                        oparray.pop();
+                        symarray.pop();
+                        symarray.push(totalarray[i]);
+
+                    }
+                    else{
+                        oparray[oparray.length-2]=oparray[oparray.length-1]/oparray[oparray.length-2];
+                        oparray.pop();
+                        symarray.pop();
+                        symarray.push(totalarray[i]);
+                    }
+                    
+                }
+            }
 
         
         for(i=3;i<totalarray.length;i++){
@@ -89,7 +115,12 @@ angular.module("myapp",[]).controller("mycontroller",function($scope){
                         oparray.pop();
                         oparray.push(parseFloat(totalarray[i-1])+parseFloat(totalarray[i-3]));
                         symarray.pop();
-                        symarray.push(totalarray[i]);
+                        finderror();
+                        
+                       
+                        
+                        
+                       
                         
                         
                         
@@ -100,7 +131,12 @@ angular.module("myapp",[]).controller("mycontroller",function($scope){
                         oparray.pop();
                         oparray.push(parseFloat(totalarray[i-1])-parseFloat(totalarray[i-3]));
                         symarray.pop();
-                        symarray.push(totalarray[i]);
+                        finderror();
+    
+                        
+
+                       
+                        
                         
                         
                     }
@@ -108,36 +144,54 @@ angular.module("myapp",[]).controller("mycontroller",function($scope){
                         oparray.pop();
                         oparray.pop();
                         oparray.push(parseFloat(totalarray[i-1])*parseFloat(totalarray[i-3]));
+                        
                         symarray.pop();
-                        symarray.push(totalarray[i]);
+                        finderror();
+                        //symarray.push(totalarray[i]);
+                        /////////////////////////////////////////////////////
+                        
+                       
+                        
+                        
                         
                         
                     }
                     else if(totalarray[i-2].symbol=='÷'){
                         oparray.pop();
                         oparray.pop();
-                        oparray.push(parseFloat(totalarray[i-1])/parseFloat(totalarray[i-3]));
+                        oparray.push(parseFloat(totalarray[i-3])/parseFloat(totalarray[i-1]));
                         symarray.pop();
-                        symarray.push(totalarray[i]);
+                        finderror();
+                        //symarray.push(totalarray[i]);
+
+                       
+
+
+                            
+                            
+                        }
                         
                         
                     }
                 }
+                else{
+                    oparray.push(parseFloat(totalarray[i]));
+    
+                    
+                }
             }
-            else{
-                oparray.push(parseFloat(totalarray[i]));
-            }
+            
 
 
         }
-        console.log(oparray);
-        console.log(symarray);
+        console.log("oparray=",oparray);
+        console.log("symarray=",symarray);
         result();
 
         function mulerror(){
             if(symarray[symarray.length-1].id==2){
                 if(symarray[symarray.length-1].symbol=='x'){
-                    oparray[oparray.length-2]=oparray[oparray.length-2]*oparray[oparray.length-1];
+                    oparray[oparray.length-2]=oparray[oparray.length-1]*oparray[oparray.length-2];
                     oparray.pop();
                     symarray.pop();
                 }
@@ -154,8 +208,12 @@ angular.module("myapp",[]).controller("mycontroller",function($scope){
 
         }
         function result(){
+            if(symarray.length==0){
+                console.log("ans",oparray);
+                console.log("success")
+            }
             
-            if(symarray[symarray.length-1].id==1){
+           else if(symarray[symarray.length-1].id==1){
                 symarray.forEach(function(i){
                     console.log("sanju");
                     if(i.symbol=='+'){
@@ -175,9 +233,13 @@ angular.module("myapp",[]).controller("mycontroller",function($scope){
                         oparray.splice(1,1);
                     }
                 })
-                console.log("ans",oparray);
+                
                 if(oparray.length!==1){
                     result();
+                }
+                else{
+                    console.log("ans",oparray);
+
                 }
     
             }
@@ -200,5 +262,5 @@ angular.module("myapp",[]).controller("mycontroller",function($scope){
         
 
     }}
-        
-})
+ 
+)
